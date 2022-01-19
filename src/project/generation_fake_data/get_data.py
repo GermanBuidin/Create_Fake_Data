@@ -1,10 +1,10 @@
 
 def getData():
-    N=[{
+    n = [{
         "order": 0,
         "title": "name",
         "type": "FULL_NAME"
-    },
+        },
         {
             "order": 1,
             "title": "number phone",
@@ -29,10 +29,14 @@ def getData():
 
         }
     ]
-    return N
+    return n
 
 
-
-
-
-
+def get_title():
+    name = []
+    for i in getData():
+        if name:
+            name = f'{name},{i["order"]} {i["title"]}'
+        else:
+            name = f'{i["order"]} {i["title"]}'
+    return list(name.split(','))
