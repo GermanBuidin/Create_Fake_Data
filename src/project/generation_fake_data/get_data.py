@@ -1,4 +1,3 @@
-from .generators import Generator
 
 def getData():
     N=[{
@@ -22,13 +21,18 @@ def getData():
             "order": 3,
             "title": "Address",
             "type": "ADDRESS"
-        }]
+        },
+        {
+            "order": 4,
+            "title": "email",
+            "type": "EMAIL",
+
+        }
+    ]
     return N
 
 
-def get_type():
-    TYPE = {"ADDRESS": Generator(6).generation_adress(),
-            "AGE": Generator(6, 6, 60).generation_age(),
-            "FULL_NAME": Generator(6).generation_fullname(),
-            "NUMBER_PHONE": Generator(6).generation_phone_number()}
-    return TYPE
+
+
+
+
