@@ -83,11 +83,9 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     },
     'users': {
-        'NAME': 'testdata',
         'ENGINE': 'djongo',
-        'USER': 'German',
-        'PASSWORD': 'Password2811'
-}
+        'NAME': 'testdata',
+    }
 }
 
 

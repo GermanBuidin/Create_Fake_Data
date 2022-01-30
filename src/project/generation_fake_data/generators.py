@@ -55,7 +55,7 @@ def generation_fake_data(rows):
 
 
 class FakeData:
-    def __init__(self, type_func, age_from=4, age_to=100, rows=6):
+    def __init__(self, type_func, age_from=0, age_to=0, rows=0):
         self.type = type_func
         self.age_from = age_from
         self.age_to = age_to
@@ -68,7 +68,3 @@ class FakeData:
                      "NUMBER_PHONE": Generator(self.rows).generation_phone_number(),
                      "EMAIL": Generator(self.rows).generation_email()}
         return data_type[self.type]
-
-
-F = generation_fake_data(10)
-

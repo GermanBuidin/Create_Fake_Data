@@ -15,4 +15,4 @@ def create_file(name, separator=',', quot="'", number=10):
     return None
 
 
-file = create_file(name='screen', separator=';', quot='"', number=500)
+file = create_file(name='strong', separator=';', quot='"', number=500)

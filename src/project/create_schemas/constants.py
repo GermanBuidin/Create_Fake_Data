@@ -9,9 +9,8 @@ STRING_CHARACTER = (
 
 TYPE = (
     ("full_name", "Full name"),
-    ("job", "Job"),
+    ("age", "Age"),
     ("email", "Email"),
     ("phone_number", "Phone numbers"),
     ("address", "Address"),
-    ("date", "Date")
 )

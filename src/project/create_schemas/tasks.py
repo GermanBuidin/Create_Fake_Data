@@ -5,4 +5,4 @@ from proj.utils import collection
 
 @shared_task
 def get_number(x, y):
-    collection.insert_one({"_id": x, "name": y})
+    collection.insert_one({"_id": '', "name": y})

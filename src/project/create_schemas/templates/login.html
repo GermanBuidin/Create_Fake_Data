@@ -9,12 +9,13 @@
             Please try again.
         </p>
     {% else %}
-        <p>Please, use the following form to log-in:</p>
+        <p>Please login:</p>
     {% endif %}
     <div class="login-form">
         <form action="{% url 'home' %}" method="post">
-            {{ form.as_p }}
             {% csrf_token %}
+            {{ form.as_ul }}
+
             <input type="hidden" name="next" value="{{ next }}"/>
             <p><input type="submit" value="Log-in"></p>
         </form>

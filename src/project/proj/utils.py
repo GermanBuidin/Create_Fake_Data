@@ -1,6 +1,7 @@
 from pymongo import MongoClient
 
 
-cluster = MongoClient("mongodb+srv://German:Password2811@cluster0.skc3a.mongodb.net/testdata?retryWrites=true&w=majority")
-db = cluster["testdata"]
-collection = db["testcollection"]
+client = MongoClient("mongodb://127.0.0.1:27017/compressors=disabled&gssapiServiceName=mongodb")
+
+db = client.testdata
+collection = db["collection"]
