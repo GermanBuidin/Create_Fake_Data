@@ -17,13 +17,10 @@ class SchemaForm(forms.Form):
 class TypeDataForm(forms.Form):
     title = forms.CharField(max_length=100)
     type = forms.ChoiceField(choices=TYPE)
-    From = forms.IntegerField()
-    to = forms.IntegerField()
+    From = forms.IntegerField(required=False)
+    to = forms.IntegerField(required=False)
     order = forms.IntegerField()
 
 
+TypeDataFormSet = formset_factory(TypeDataForm, extra=0)
 
-
-
-SchemaFormSet = formset_factory(SchemaForm, extra=1)
-TypeDataFormSet = formset_factory(TypeDataForm, extra=1, can_delete=True )

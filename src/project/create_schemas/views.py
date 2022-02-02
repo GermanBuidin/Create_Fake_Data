@@ -1,20 +1,18 @@
+from django.forms import formset_factory
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User
-from django.forms import formset_factory
 
-from .forms import LoginForm, SchemaForm, TypeDataFormSet, SchemaFormSet
+from .forms import LoginForm, SchemaForm, TypeDataFormSet, TypeDataForm
 from .tasks import *
-from for_views import datajson
+from .for_views import *
 from proj.utils import collection
 
 
-
-def new_schema(request):
+def data_sets(request):
     print(get_number.delay(x=5, y=6))
-    print (10)
+    print(10)
     return render(request, "new_schema.html")
 
 
@@ -23,13 +21,12 @@ def data_schemas(request):
 
 
 @login_required
-def data_sets(request):
+def new_schema(request):
     if request.method == 'POST':
         form = SchemaForm(request.POST)
         formset = TypeDataFormSet(request.POST)
         if form.is_valid() and formset.is_valid():
             parent = datajson(form, formset)
-            parent['_id'] = collection.count_documents({"_id": {'$exists': True}})+1
             collection.insert_one(parent)
             return redirect(f'edit/{parent["_id"]}/')
         else:
@@ -38,15 +35,16 @@ def data_sets(request):
                 "formset": formset,
                 "message": 'Your data is invalid'
             }
-            return render(request, "data_sets.html", context)
+            return render(request, "new_schema.html", context)
     else:
         form = SchemaForm()
-        formset = TypeDataFormSet()
+        TypeDataFormSetEmpty = formset_factory(TypeDataForm, extra=1)
+        formset = TypeDataFormSetEmpty()
         context = {
             "form": form,
             "formset": formset,
         }
-        return render(request, "data_sets.html", context)
+        return render(request, "new_schema.html", context)
 
 
 def handler_404(request, exception):
@@ -64,7 +62,7 @@ def user_login(request):
             if user is not None:
                 if user.is_active:
                     login(request, user)
-                    return redirect("schema")
+                    return redirect("new_schema/")
                 else:
                     return HttpResponse('Disabled account')
             else:
@@ -80,31 +78,36 @@ def user_logout(request):
 
 
 @login_required
-def edit_schema(request, id):
-    data = collection.find({'_id': id})
-    dataset = [i for i in data]
+def edit_schema(request, _id):
     if request.method == 'POST':
+        dataset = datajson_for_initial(_id)
         form = SchemaForm(request.POST)
         formset = TypeDataFormSet(request.POST)
         context = {
             "form": form,
             "formset": formset,
+            "number": dataset[0]["schema"]
         }
         if form.is_valid() and formset.is_valid():
-            parent = form.clean()
-            child = []
-            for f in formset:
-                child.append(f.clean())
-            parent['schema'] = child
-            parent['_id'] = id
-            collection.replace_one({"_id": id}, parent)
-        return render(request, "data_sets.html", context)
+            parent = datajson(form, formset)
+            collection.replace_one({"_id": ObjectId(_id)}, parent)
+            context["number"] = parent["schema"]
+        return render(request, "new_schema.html", context)
     else:
-
+        dataset = datajson_for_initial(_id)
+        data_initial = datajson_for_initial_formset(dataset[0]["schema"])
         form = SchemaForm(initial=dataset[0])
-        formset = TypeDataFormSet(initial=dataset[0]['schema'])
+        formset = TypeDataFormSet(initial=data_initial)
         context = {
             "form": form,
             "formset": formset,
+            "number": dataset[0]["schema"]
         }
-        return render(request, "data_sets.html", context)
+        return render(request, "new_schema.html", context)
+
+
+@login_required
+def delete_column(request, _id, id_child):
+    dataset = datajson_for_delete_column(_id, id_child)
+    collection.replace_one({"_id": ObjectId(_id)}, dataset)
+    return redirect(edit_schema, _id=_id)

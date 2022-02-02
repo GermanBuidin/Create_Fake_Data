@@ -34,12 +34,13 @@
         <div id='column-form-list'>
             {% for form in formset %}
                     <div class='column-form'>
-                        {{ form }}
+                        {{ form.id }}<a href=''>Delete</a>
+
                     </div>
             {% endfor %}
         </div>
 
-        <div id='empty-form' class="hidden">{{ formset.empty_form}}</div>
+        <div id='empty-form' class="hidden">{{ formset.empty_form}}  </div>
         <button id='add-more' type='button'>Add more</button>
         {% endif %}
         <button style='margin-top:10px;' type='submit' >Save</button>
