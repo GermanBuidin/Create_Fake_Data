@@ -1,0 +1,40 @@
+<div id="empty-form" class="hidden">
+      <span class="block"><label for="id_form-__prefix__-title">Title:
+      <input type="text" name="form-__prefix__-title" maxlength="100" id="id_form-__prefix__-title" size="30">
+      </label></span>
+
+      <span class="block"><label for="id_form-__prefix__-type" >Type:
+      <select name="form-__prefix__-type" id="id_form-__prefix__-type" onchange="openBlock(id, this.value)">
+
+
+        <option value="full_name">Full name</option>
+        <option value="integer">integer</option>
+        <option value="email">Email</option>
+        <option value="phone_number">Phone numbers</option>
+        <option value="address">Address</option>
+
+      </select>
+      </label></span>
+
+      <span id="magiya-com-ned-addid_form-__prefix__-type" style="visibility: hidden">
+
+        <span class="block"><label >From:
+        <input type="text" name="form-__prefix__-From" id="id_form-__prefix__-From" size="8">
+        </label></span>
+
+        <span class="block"><label for="id_form-__prefix__-To">To
+        <input type="text" name="form-__prefix__-To" id="id_form-__prefix__-To" size="8">
+        </label></span>
+
+      </span>
+
+      <span class="block"><label for="id_form-__prefix__-ORDER">Order:
+      <input type="number" name="form-__prefix__-ORDER" id="id_form-__prefix__-ORDER">
+      </label></span>
+
+      {% if schema == "Edit Schema" %}
+        <span class="block"><a href="delete/form-__prefix__/">Delete</a></span>
+      {% endif %}
+
+
+        </div>
