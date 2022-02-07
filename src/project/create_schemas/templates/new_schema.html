@@ -14,12 +14,12 @@
         <button style="vertical-align:middle" type='submit' class="button_1">Save</button>
         <h1>{{ schema }}</h1>
            {% csrf_token %}
- {% for field in form %}
+ {{ form.as_p}}
        <div class='row'>
-           {{ field }}
-           {{field.errors}}
+
+
        </div>
- {% endfor %}
+
 
  {% if formset %}
     <h3>Schema columns</h3>
@@ -35,7 +35,7 @@
 
         {% include 'empty_form.html' %}
 
-        <button id='add-more' class="button_2" type='submit'>Add more </button>
+        <button id='add-more' class="button_2" type='submit'>Add column</button>
         {% endif %}
 
 

@@ -15,15 +15,16 @@ Including another URLconf
 """
 
 from django.contrib import admin
-
 from django.urls import path, include
 
-from create_schemas.views import *
+from create_schemas.views import handler_404
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include("create_schemas.urls")),
+    path('create/', include("create_csv_files.urls")),
+
 ]
 
 handler404 = handler_404

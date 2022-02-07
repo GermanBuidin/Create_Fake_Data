@@ -5,19 +5,9 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 
 from .forms import LoginForm, SchemaForm, TypeDataFormSet, TypeDataForm, SchemaForm2
-from .tasks import *
+
 from .for_views import *
 from proj.utils import collection
-
-
-def data_sets(request):
-    print(get_number.delay(x=5, y=6))
-    print(10)
-    return render(request, "new_schema.html")
-
-
-def data_schemas(request):
-    return render(request, "data_schema.html")
 
 
 @login_required

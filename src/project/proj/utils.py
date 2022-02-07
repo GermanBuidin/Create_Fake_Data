@@ -8,4 +8,4 @@ db = client.testdata
 collection = db["collection"]
 
 #print(list(collection.find({"_id": ObjectId('61fa75dcf28e1abae6acb8cd')}, {"_id":False})))
-#print(dir(collection))
+print(dir(collection))
