@@ -48,10 +48,13 @@ class BaseTypeDataFormSet(BaseFormSet):
             if title in titles:
                 raise ValidationError("Aticles Title in a set must have distinct titles")
             titles.append(title)
-            if order in orders:
-                raise ValidationError("Aticles Order in a set must have distinct number")
-            if order < 0:
-                raise ValidationError("Order value must be a positive number")
+            if order:
+                if order in orders:
+                    raise ValidationError("Aticles Order in a set must have distinct number")
+                if order <= 0:
+                    raise ValidationError("Order value must be a positive number")
+            else:
+                raise ValidationError("Field Order must not be empty")
             orders.append(order)
             types = form.cleaned_data.get("type")
             if types == "integer":

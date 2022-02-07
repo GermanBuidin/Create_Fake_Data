@@ -11,7 +11,8 @@
 
 <div style='margin-top:30px;'>
     <form action='' method="POST">
-       <h1>{{ schema }}</h1>
+        <button style="vertical-align:middle" type='submit' class="button_1">Save</button>
+        <h1>{{ schema }}</h1>
            {% csrf_token %}
  {% for field in form %}
        <div class='row'>
@@ -34,9 +35,9 @@
 
         {% include 'empty_form.html' %}
 
-        <button id='add-more' style='margin-top:10px;' type='submit'>Add</button>
+        <button id='add-more' class="button_2" type='submit'>Add more </button>
         {% endif %}
-        <button style='margin-top:10px;' type='submit' class="button_1">Save</button>
+
 
     </form>
 </div>
