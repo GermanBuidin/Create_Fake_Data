@@ -4,7 +4,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 
-from .forms import LoginForm, SchemaForm, TypeDataFormSet, TypeDataForm
+from .forms import LoginForm, SchemaForm, TypeDataFormSet, TypeDataForm, SchemaForm2
 from .tasks import *
 from .for_views import *
 from proj.utils import collection
@@ -33,16 +33,20 @@ def new_schema(request):
             context = {
                 "form": form,
                 "formset": formset,
-                "message": 'Your data is invalid'
+                "message": 'Your data is invalid',
+                "integer": "integer",
+                "schema": "New Schema"
             }
             return render(request, "new_schema.html", context)
     else:
         form = SchemaForm()
         TypeDataFormSetEmpty = formset_factory(TypeDataForm, extra=1)
-        formset = TypeDataFormSetEmpty()
+        formset = TypeDataFormSet()
         context = {
             "form": form,
             "formset": formset,
+            "integer": "integer",
+            "schema": "New Schema"
         }
         return render(request, "new_schema.html", context)
 
@@ -80,28 +84,39 @@ def user_logout(request):
 @login_required
 def edit_schema(request, _id):
     if request.method == 'POST':
-        dataset = datajson_for_initial(_id)
-        form = SchemaForm(request.POST)
+        form = SchemaForm2(request.POST)
         formset = TypeDataFormSet(request.POST)
         context = {
             "form": form,
             "formset": formset,
-            "number": dataset[0]["schema"]
+            "integer": "integer",
+            "schema": "Edit Schema"
         }
         if form.is_valid() and formset.is_valid():
             parent = datajson(form, formset)
-            collection.replace_one({"_id": ObjectId(_id)}, parent)
-            context["number"] = parent["schema"]
+            validation_name = collection.find_one({"_id": ObjectId(_id)})
+            validation_name2 = collection.find_one({"name": parent["name"]})
+            if validation_name2:
+                if validation_name["_id"] != validation_name2["_id"]:
+                    context["message"] = "Wrong name. Choice another name"
+                else:
+                    collection.replace_one({"_id": ObjectId(_id)}, parent)
+                    formset2 = TypeDataFormSet(initial=parent["schema"])
+                    context["formset"] = formset2
+            else:
+                collection.replace_one({"_id": ObjectId(_id)}, parent)
+                formset2 = TypeDataFormSet(initial=parent["schema"])
+                context["formset"] = formset2
         return render(request, "new_schema.html", context)
     else:
         dataset = datajson_for_initial(_id)
-        data_initial = datajson_for_initial_formset(dataset[0]["schema"])
-        form = SchemaForm(initial=dataset[0])
-        formset = TypeDataFormSet(initial=data_initial)
+        form = SchemaForm(initial=dataset)
+        formset = TypeDataFormSet(initial=dataset["schema"])
         context = {
             "form": form,
             "formset": formset,
-            "number": dataset[0]["schema"]
+            "integer": "integer",
+            "schema": "Edit Schema"
         }
         return render(request, "new_schema.html", context)
 

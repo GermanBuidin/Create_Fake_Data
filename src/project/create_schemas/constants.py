@@ -9,8 +9,12 @@ STRING_CHARACTER = (
 
 TYPE = (
     ("full_name", "Full name"),
-    ("age", "Age"),
+    ("integer", "integer"),
     ("email", "Email"),
     ("phone_number", "Phone numbers"),
     ("address", "Address"),
+)
+VISIBILITY = (
+    ('visible', 'visible'),
+    ('hidden', 'hidden')
 )

@@ -1,10 +1,20 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Data Schema</title>
-</head>
-<body>
-    <h1>Data Schema</h1>
-</body>
-</html>
+<div id="empty-form" class="hidden">
+    <label for="id_form-__prefix__-title">Title:</label>
+      <input type="text" name="form-__prefix__-title" maxlength="100" id="id_form-__prefix__-title">
+    <label for="id_form-__prefix__-type">Type:</label>
+      <select name="form-__prefix__-type" id="id_form-__prefix__-type">
+        <option value="full_name">Full name</option>
+        <option value="int">Integer</option>
+        <option value="email">Email</option>
+        <option value="phone_number">Phone numbers</option>
+        <option value="address">Address</option>
+      </select>
+    <div class="hidden">
+    <label for="id_form-__prefix__-From">From:</label>
+      <input type="number" name="form-__prefix__-From" id="id_form-__prefix__-From">
+    <label for="id_form-__prefix__-To">To:</label>
+      <input type="number" name="form-__prefix__-To" id="id_form-__prefix__-To">
+    <label for="id_form-__prefix__-ORDER">Order:</label>
+</div>
+      <input type="number" name="form-__prefix__-ORDER" id="id_form-__prefix__-ORDER">
+  </div>

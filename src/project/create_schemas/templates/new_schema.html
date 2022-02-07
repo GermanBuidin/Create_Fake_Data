@@ -7,75 +7,124 @@
     .column-form {
         border-bottom: 1px solid black;
     }
+    .button_1{
     .hidden {
-        display: none
+        display: none;
     }
-</style>
-{% if message %}
+    input, label {
+        display:block;
+        }
+    select, label {
+        display:block;
+        }
+    .block {
+        display: inline-block;
+        {
 
-<p>{{ message }}</p>
+</style>
+
+{% if message %}
+    <p>{{ message }}</p>
 {% endif %}
+
 <div style='margin-top:30px;'>
     <form action='' method="POST">
-        <h1>New schema</h1>
-        {% csrf_token %}
-       {% for field in form %}
+       <h1>{{ schema }}</h1>
+           {% csrf_token %}
+ {% for field in form %}
        <div class='row'>
-        {{ field }}
+           {{ field }}
+           {{field.errors}}
+       </div>
+ {% endfor %}
 
+ {% if formset %}
+    <h3>Schema columns</h3>
 
-        </div>
-       {% endfor %}
-
-
-        {% if formset %}
-        <h3>Type column</h3>
-        {{ formset.management_form }}
+    {{ formset.management_form }}
         <div id='column-form-list'>
             {% for forms in formset %}
-                    <div class='column-form'>
-                        {{ forms }}{% for i in number %}{% if forms.prefix in i %}<a href="delete/{{ forms.prefix }}/">
-                        Delete</a>{% endif %}{% endfor %}
-                    </div>
+                <div id={{forms.prefix}} class='column-form'>
+
+                    <span class="block"><label>{{forms.title.label}}:{{forms.title}}</label></span>
+
+                    <span class="block"><label>{{forms.type.label}}: {{forms.type}}</label></span>
+
+                    {% if forms.type.value == "integer" %}
+                        <span id="magiya-com-ned-addid_{{forms.prefix}}-type"  style="visibility: visible">
+                    {% else %}
+                        <span id="magiya-com-ned-addid_{{forms.prefix}}-type"  style="visibility: hidden">
+                    {% endif %}
+                            <span class="block"><label>{{forms.From.label}}:{{forms.From}}</label></span>
+                            <span class="block"><label>{{forms.To.label}}:{{forms.To}}</label></span>
+                        </span>
+
+                    <span class="block"><label>{{forms.ORDER.label}}:{{forms.ORDER}}</label></span>
+
+
+                   {% if schema == "Edit Schema" %}
+                            <span class="block"><a href="delete/{{forms.prefix}}/">Delete</a></span>
+                   {% endif %}
+
+                </div>
+
             {% endfor %}
+            {{ formset.non_form_errors }}
+
         </div>
 
-        <div id='empty-form' class="hidden">{{ formset.empty_form}}</div>
+
+
+
+<div id="empty-form" class="hidden">
+      <span class="block"><label for="id_form-__prefix__-title">Title:
+      <input type="text" name="form-__prefix__-title" maxlength="100" id="id_form-__prefix__-title" size="30">
+      </label></span>
+
+      <span class="block"><label for="id_form-__prefix__-type" >Type:
+      <select name="form-__prefix__-type" id="id_form-__prefix__-type" onchange="openBlock(id, this.value)">
+
+
+        <option value="full_name">Full name</option>
+        <option value="integer">integer</option>
+        <option value="email">Email</option>
+        <option value="phone_number">Phone numbers</option>
+        <option value="address">Address</option>
+
+      </select>
+      </label></span>
+
+      <span id="magiya-com-ned-addid_form-__prefix__-type" style="visibility: hidden">
+
+        <span class="block"><label >From:
+        <input type="text" name="form-__prefix__-From" id="id_form-__prefix__-From" size="8">
+        </label></span>
+
+        <span class="block"><label for="id_form-__prefix__-To">To
+        <input type="text" name="form-__prefix__-To" id="id_form-__prefix__-To" size="8">
+        </label></span>
+
+      </span>
+
+      <span class="block"><label for="id_form-__prefix__-ORDER">Order:
+      <input type="number" name="form-__prefix__-ORDER" id="id_form-__prefix__-ORDER">
+      </label></span>
+
+      {% if schema == "Edit Schema" %}
+        <span class="block"><a href="delete/form-__prefix__/">Delete</a></span>
+      {% endif %}
+
+
+        </div>
+
+
         <button id='add-more' style='margin-top:10px;' type='submit'>Add</button>
         {% endif %}
-        <button style='margin-top:10px;' type='submit' >Save</button>
-        
+        <button style='margin-top:10px;' type='submit' class="button_1">Save</button>
 
     </form>
 </div>
 
-<script>
-
-    const addMoreBtn = document.getElementById('add-more')
-    const totalNewForms = document.getElementById('id_form-TOTAL_FORMS')
-
-    addMoreBtn.addEventListener('click', add_new_form)
-    function add_new_form(event) {
-        if (event) {
-            event.preventDefault()
-        }
-        const currentTypeColumnForms = document.getElementsByClassName('column-form')
-        const currentFormCount = currentTypeColumnForms.length // + 1
-        const formCopyTarget = document.getElementById('column-form-list')
-        const copyEmptyFormEl = document.getElementById('empty-form').cloneNode(true)
-        copyEmptyFormEl.setAttribute('class', 'column-form')
-        copyEmptyFormEl.setAttribute('id', `form-${currentFormCount}`)
-        const regex = new RegExp('__prefix__', 'g')
-        copyEmptyFormEl.innerHTML = copyEmptyFormEl.innerHTML.replace(regex, currentFormCount)
-        totalNewForms.setAttribute('value', currentFormCount + 1)
-        // now add new empty form element to our html form
-        formCopyTarget.append(copyEmptyFormEl)
-    }
-
-
-
-</script>
-
-
+{% include 'script_NewSchema.html' %}
 
 {% endblock content %}
