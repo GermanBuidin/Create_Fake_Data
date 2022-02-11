@@ -7,6 +7,8 @@
       <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/project" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/project/fake" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/project/create_csv_files" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/project/media" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/venv" />
     </content>
     <orderEntry type="inheritedJdk" />

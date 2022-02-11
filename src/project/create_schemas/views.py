@@ -1,11 +1,9 @@
-from django.forms import formset_factory
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 
-from .forms import LoginForm, SchemaForm, TypeDataFormSet, TypeDataForm, SchemaForm2
-
+from .forms import LoginForm, SchemaForm, TypeDataFormSet,  SchemaForm2
 from .for_views import *
 from proj.utils import collection
 
@@ -30,7 +28,6 @@ def new_schema(request):
             return render(request, "new_schema.html", context)
     else:
         form = SchemaForm()
-        TypeDataFormSetEmpty = formset_factory(TypeDataForm, extra=1)
         formset = TypeDataFormSet()
         context = {
             "form": form,

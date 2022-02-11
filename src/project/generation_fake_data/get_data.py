@@ -35,8 +35,7 @@ def getData():
 def get_title():
     name = []
     for i in getData():
-        if name:
-            name = f'{name},{i["order"]} {i["title"]}'
-        else:
-            name = f'{i["order"]} {i["title"]}'
-    return list(name.split(','))
+        name.append(f'{i["order"]} {i["title"]}')
+    print(name)
+
+d=get_title()

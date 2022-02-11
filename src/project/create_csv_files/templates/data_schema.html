@@ -2,8 +2,50 @@
 
 
 {% block content %}
+<style>
+    .process{
+        border:1px ;
+        border-radius: 3px;
+    }
+    .forma_generate {
+    position:absolute;
+    right:21%;
+    top:1px;
+    }
+</style>
+   <h3 style="color:blue" >Input number rows for generation fake data</h3>
+     <p style="visibility:hidden">hello</p>
+ <span ><form  action='' method="POST" class="forma_generate">
 
-Data_schema
 
+           {% csrf_token %}
+           {{ form }}<button style="vertical-align:middle" type='submit' class="button_1">Generate data</button>
+ </form></span>
+
+<table position="relative" top="200px" width="80%" border="1 solid grey" cellspacing=0 cellpadding=2 >
+    <thead align="center">
+        <th>#</th>
+        <th>Name</th>
+        <th>Created</th>
+        <th>Status</th>
+        <th>Actions</th>
+    </thead>
+    <tbody align="center">
+        {% for i in data %}
+        {% if i.processing  %}
+        <tr>
+            <td>{{i.number}}</td>
+            <td>{{i.name}}</td>
+            <td>{{i.datenow|date:"Y-m-d"}}</td>
+            <td><label class="process" style='background-color:{{i.color}}'>{{i.processing}}</label></td>
+            <td>{% if i.processing == 'Ready' %}
+                <a href='/media/{{i.name}}.csv' download="{{i.name}}.csv" >Download</a>
+                {% endif %}
+            </td>
+        </tr>
+        {% endif%}
+      {% endfor %}
+    </tbody>
+</table>
 
 {% endblock content %}

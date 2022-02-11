@@ -17,9 +17,12 @@ class LoginForm(forms.Form):
 
 
 class SchemaForm(forms.Form):
-    name = forms.CharField(label='Name', max_length=100, validators=[validation_name], widget=forms.TextInput(attrs={'size': '30'}))
-    separator = forms.ChoiceField(label='Column separator', choices=COLUMN_SEPARATOR, widget=forms.Select(attrs={'class': "schema"}))
-    quote = forms.ChoiceField(label='String character', choices=STRING_CHARACTER, widget=forms.Select(attrs={'class': "schema"}))
+    name = forms.CharField(label='Name', max_length=100, validators=[validation_name],
+                           widget=forms.TextInput(attrs={'size': '30'}))
+    separator = forms.ChoiceField(label='Column separator', choices=COLUMN_SEPARATOR,
+                                  widget=forms.Select(attrs={'class': "schema"}))
+    quote = forms.ChoiceField(label='String character', choices=STRING_CHARACTER,
+                              widget=forms.Select(attrs={'class': "schema"}))
 
 
 class SchemaForm2(forms.Form):

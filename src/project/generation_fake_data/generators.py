@@ -1,6 +1,6 @@
 from random import choice, randrange
+
 from generation_fake_data.constants import *
-from generation_fake_data.get_data import getData
 
 
 class Generator:
@@ -37,15 +37,15 @@ class Generator:
             yield f'{house} {country}'
 
 
-def generation_fake_data(rows):
+def generator_fake_data(rows, data):
     list_data = {}
-    for i in getData():
+    for i in data['schema']:
         type_func = i["type"]
         age_from = 0
         age_to = 0
-        if "AGE" in i.values():
-            age_from = i["from"]
-            age_to = i["to"]
+        if i['type'] == 'integer':
+            age_from = i["From"]
+            age_to = i["To"]
         for n, k in enumerate(FakeData(type_func, age_from, age_to, rows).get_type()):
             if n in list_data:
                 list_data[n] = f'{list_data[n]},{k}'
@@ -62,9 +62,16 @@ class FakeData:
         self.rows = rows
 
     def get_type(self):
-        data_type = {"ADDRESS": Generator(self.rows).generation_address(),
-                     "AGE": Generator(self.rows, self.age_from, self.age_to).generation_age(),
-                     "FULL_NAME": Generator(self.rows).generation_fullname(),
-                     "NUMBER_PHONE": Generator(self.rows).generation_phone_number(),
-                     "EMAIL": Generator(self.rows).generation_email()}
-        return data_type[self.type]
+        types = ['Address', 'integer', 'Full name', 'Phone numbers', 'Email']
+        for i in types:
+            if self.type == "address":
+                data_types = Generator(self.rows).generation_address()
+            elif self.type == "integer":
+                data_types = Generator(self.rows, self.age_from, self.age_to).generation_age()
+            elif self.type == "full_name":
+                data_types = Generator(self.rows).generation_fullname()
+            elif self.type == "phone_numbers":
+                data_types = Generator(self.rows).generation_phone_number()
+            else:
+                data_types = Generator(self.rows).generation_email()
+        return data_types
