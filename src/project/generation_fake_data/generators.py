@@ -14,8 +14,8 @@ class Generator:
 
     def __init__(self, rows, number_from=0, number_to=0):
         self.rows = rows
-        self.age_from = number_from
-        self.age_to = number_to
+        self.number_from = number_from
+        self.number_to = number_to
 
     def generation_fullname(self):
         for i in range(self.rows):
@@ -35,7 +35,7 @@ class Generator:
 
     def generation_number(self):
         for i in range(self.rows):
-            yield f'{randrange(self.age_from, self.age_to)}'
+            yield f'{randrange(self.number_from, self.number_to)}'
 
     def generation_address(self):
         for i in range(self.rows):
