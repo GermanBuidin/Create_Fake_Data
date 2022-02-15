@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+
+{% include 'style_NewSchema.html' %}
+
+{% if message %}
+    <p>{{ message }}</p>
+{% endif %}
+
+<div style='margin-top:30px;'>
+    <form action='' method="POST">
+        <button style="vertical-align:middle" type='submit' class="button_1">Save</button>
+        <h1>{{ schema }}</h1>
+           {% csrf_token %}
+ {{ form.as_p}}
+       <div class='row'>
+
+
+       </div>
+
+
+ {% if formset %}
+    <h3>Schema columns</h3>
+
+    {{ formset.management_form }}
+        <div id='column-form-list'>
+            {% for forms in formset %}
+              {% include 'formset_div.html' %}
+            {% endfor %}
+            {{ formset.non_form_errors }}
+
+        </div>
+
+        {% include 'empty_form.html' %}
+
+        <button id='add-more' class="button_2" type='submit'>Add column</button>
+        {% endif %}
+
+
+    </form>
+</div>
+
+{% include 'script_NewSchema.html' %}
+
+{% endblock content %}
