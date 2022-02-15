@@ -1,41 +1,40 @@
+from bson import ObjectId
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 
-from .forms import LoginForm, SchemaForm, TypeDataFormSet,  SchemaForm2
-from .for_views import *
-from proj.utils import collection
+from .forms import LoginForm, SchemaFormNew, TypeDataFormSet,  SchemaFormEdit
+from .for_views import create_json_date, get_initial_form_data, delete_rows
+from main_catalog.utils import collection
 
 
 @login_required
-def new_schema(request):
+def create_new_schema(request):
     if request.method == 'POST':
-        form = SchemaForm(request.POST)
+        form = SchemaFormNew(request.POST)
         formset = TypeDataFormSet(request.POST)
         if form.is_valid() and formset.is_valid():
-            parent = datajson(form, formset)
-            collection.insert_one(parent)
-            return redirect(f'edit/{parent["_id"]}/')
+            schema_data = create_json_date(form, formset)
+            schema_data['user'] = request.user.id
+            collection.insert_one(schema_data)
+            return redirect(f'edit/{schema_data["_id"]}/')
         else:
             context = {
                 "form": form,
                 "formset": formset,
                 "message": 'Your data is invalid',
-                "integer": "integer",
                 "schema": "New Schema"
             }
             return render(request, "new_schema.html", context)
-    else:
-        form = SchemaForm()
-        formset = TypeDataFormSet()
-        context = {
-            "form": form,
-            "formset": formset,
-            "integer": "integer",
-            "schema": "New Schema"
-        }
-        return render(request, "new_schema.html", context)
+    form = SchemaFormNew()
+    formset = TypeDataFormSet()
+    context = {
+        "form": form,
+        "formset": formset,
+        "schema": "New Schema"
+    }
+    return render(request, "new_schema.html", context)
 
 
 def handler_404(request, exception):
@@ -69,47 +68,46 @@ def user_logout(request):
 
 
 @login_required
-def edit_schema(request, _id):
+def edit_schema(request, document_id):
     if request.method == 'POST':
-        form = SchemaForm2(request.POST)
+
+        form = SchemaFormEdit(request.POST)
         formset = TypeDataFormSet(request.POST)
         context = {
             "form": form,
             "formset": formset,
-            "integer": "integer",
             "schema": "Edit Schema"
         }
         if form.is_valid() and formset.is_valid():
-            parent = datajson(form, formset)
-            validation_name = collection.find_one({"_id": ObjectId(_id)})
-            validation_name2 = collection.find_one({"name": parent["name"]})
-            if validation_name2:
-                if validation_name["_id"] != validation_name2["_id"]:
+            schema_data = create_json_date(form, formset)
+            schema_data['user'] = request.user.id
+            validation_name = collection.find_one({"name": schema_data["name"]})
+            if validation_name:
+                if validation_name["_id"] != ObjectId(document_id):
                     context["message"] = "Wrong name. Choice another name"
                 else:
-                    collection.replace_one({"_id": ObjectId(_id)}, parent)
-                    formset2 = TypeDataFormSet(initial=parent["schema"])
-                    context["formset"] = formset2
+                    collection.replace_one({"_id": ObjectId(document_id)}, schema_data)
+                    formset_initial = TypeDataFormSet(initial=schema_data["schema"])
+                    context['formset'] = formset_initial
             else:
-                collection.replace_one({"_id": ObjectId(_id)}, parent)
-                formset2 = TypeDataFormSet(initial=parent["schema"])
-                context["formset"] = formset2
+                collection.replace_one({"_id": ObjectId(document_id)}, schema_data)
+                formset_initial = TypeDataFormSet(initial=schema_data["schema"])
+                context['formset'] = formset_initial
         return render(request, "new_schema.html", context)
     else:
-        dataset = datajson_for_initial(_id)
-        form = SchemaForm(initial=dataset)
-        formset = TypeDataFormSet(initial=dataset["schema"])
+        form_data = get_initial_form_data(document_id)
+        form = SchemaFormNew(initial=form_data)
+        formset = TypeDataFormSet(initial=form_data["schema"])
         context = {
             "form": form,
             "formset": formset,
-            "integer": "integer",
             "schema": "Edit Schema"
         }
         return render(request, "new_schema.html", context)
 
 
 @login_required
-def delete_column(request, _id, id_child):
-    dataset = datajson_for_delete_column(_id, id_child)
-    collection.replace_one({"_id": ObjectId(_id)}, dataset)
-    return redirect(edit_schema, _id=_id)
+def delete_column(request, document_id, id_row):
+    dataset = delete_rows(document_id, id_row)
+    collection.replace_one({"_id": ObjectId(document_id)}, dataset)
+    return redirect(edit_schema, document_id=document_id)

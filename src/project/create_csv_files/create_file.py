@@ -3,18 +3,17 @@ from datetime import datetime
 from bson import ObjectId
 
 from generation_fake_data.generators import generator_fake_data
-from proj import settings
-from create_csv_files.for_views import list_cleaner
-from proj.utils import collection
+from main_catalog import settings
+from create_csv_files.for_views import data_cleaning
+from main_catalog.utils import collection
 
 
-def create_files(rows):
+def create_files(user_id, rows):
     url = settings.MEDIA_ROOT
-    data_set = list_cleaner()
+    data_set = data_cleaning(user_id)
     for data in data_set:
         data['datenow'] = datetime.now()
-        data['processing'] = 'Processing'
-        data['color'] = 'grey'
+        data['status'] = 'Processing'
         collection.replace_one({"_id": ObjectId(data['_id'])}, data)
         with open(f'{url}/{data["name"]}.csv', 'w') as f:
             write = csv.writer(f, delimiter=data['separator'], quoting=csv.QUOTE_ALL, quotechar=data['quote'])
@@ -25,7 +24,6 @@ def create_files(rows):
                 row = i.split(",")
                 write.writerow(row)
             data['link'] = f'{url}/{data["name"]}.csv'
-            data['processing'] = 'Ready'
-            data['color'] = 'lightgreen'
+            data['status'] = 'Ready'
             collection.replace_one({"_id": ObjectId(data['_id'])}, data)
-    return None
+

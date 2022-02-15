@@ -7,7 +7,7 @@ LAST_NAME = ('Smith', 'Johnson', 'Williams', 'Brown', 'Jones', 'Garcia', 'Miller
              'Martin', 'Perez', 'Thompson', 'White', 'Harries', 'Clark', 'Lewis', 'Robinson', 'Walker',
              'Young', 'King', 'Hill', 'Flores', 'Scott', 'Torres')
 
-COD = ('93', '63', '68', '98', '99', '66', '95', '50')
+CODE = ('93', '63', '68', '98', '99', '66', '95', '50')
 
 E_DEMON = ('gmail.com', 'ukr.net', 'io.ua', 'mail.ru')
 

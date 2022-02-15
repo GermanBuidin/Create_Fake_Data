@@ -13,7 +13,7 @@
     top:1px;
     }
 </style>
-   <h3 style="color:blue" >Input number rows for generation fake data</h3>
+   <h3 style="color:blue" >Input number rows </h3>
      <p style="visibility:hidden">hello</p>
  <span ><form  action='' method="POST" class="forma_generate">
 
@@ -32,13 +32,19 @@
     </thead>
     <tbody align="center">
         {% for i in data %}
-        {% if i.processing  %}
+        {% if i.status  %}
         <tr>
             <td>{{i.number}}</td>
             <td>{{i.name}}</td>
             <td>{{i.datenow|date:"Y-m-d"}}</td>
-            <td><label class="process" style='background-color:{{i.color}}'>{{i.processing}}</label></td>
-            <td>{% if i.processing == 'Ready' %}
+            <td>
+                {% if i.status == 'Ready' %}
+                    <label class="process" style='background-color:lightgreen'>{{i.status}}</label>
+                {% else %}
+                    <label class="process" style='background-color:lightgrey'>{{i.status}}</label>
+                {% endif%}
+            </td>
+            <td>{% if i.status == 'Ready' %}
                 <a href='/media/{{i.name}}.csv' download="{{i.name}}.csv" >Download</a>
                 {% endif %}
             </td>
